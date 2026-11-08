@@ -32,6 +32,14 @@ run() { if (( DRY_RUN )); then printf '    [dry-run] %s\n' "$*"; else "$@"; fi; 
 
 [ -f "$REPO/AGENTS.md" ] || die "仓库不完整：缺 $REPO/AGENTS.md"
 [ -d "$REPO/skills" ]    || die "仓库不完整：缺 $REPO/skills"
+[ -f "$REPO/skills/manifest.tsv" ] || die "仓库不完整：缺锁文件 skills/manifest.tsv"
+
+if [ -d "$DSH_HOME" ] && [ ! -w "$DSH_HOME" ]; then
+  die "$DSH_HOME 不可写（检查权限，或设置 DSH_HOME 指向别处）"
+fi
+if [ ! -d "$DSH_HOME" ] && (( ! DRY_RUN )); then
+  mkdir -p "$DSH_HOME" 2>/dev/null || die "无法创建 $DSH_HOME（父目录不可写？）"
+fi
 
 printf '\nquick-startup → %s%s\n\n' "$DSH_HOME" "$([[ $DRY_RUN == 1 ]] && echo '  (dry-run)')"
 

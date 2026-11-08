@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: 锁文件必须是最新的
+        run: |
+          python3 scripts/make-manifest.py .
+          if ! git diff --exit-code -- skills/manifest.tsv; then
+            echo "::error::skills/manifest.tsv 过期，请本地运行 make manifest 后提交"
+            exit 1
+          fi
+
+      - name: 集成测试
+        run: ./tests/run.sh
+
+      - name: 仓库自检
+        run: ./scripts/verify.sh
+
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: shellcheck
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq shellcheck
+          shellcheck --version
+          shellcheck -x scripts/*.sh tests/run.sh
+
+      - name: Python 语法与静态检查
+        run: |
+          python3 -m py_compile scripts/*.py
+          pip install --quiet ruff
+          ruff check --select E9,F scripts/
+
+      - name: Makefile 与 YAML 可解析
+        run: |
+          make -n all >/dev/null
+          python3 - <<'PY'
+          import glob, sys
+          try:
+              import yaml
+          except ImportError:
+              sys.exit(0)  # 没装 pyyaml 就跳过
+          for f in glob.glob('.github/workflows/*.yml'):
+              yaml.safe_load(open(f))
+              print(f'{f} OK')
+          PY
+
+  secrets:
+    name: secret-scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

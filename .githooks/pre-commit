@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# 可选本地门禁：启用 `git config core.hooksPath .githooks`
+#
+# 做两件事：
+#   1. 若 skills/ 变了但锁文件没更新，自动重新生成并重新暂存；
+#   2. 跑仓库级校验（不查本机安装，避免在别人的机器上误报）。
+#
+# 已知局限：校验读的是工作区而非 index，部分暂存时可能放过问题——CI 会兜底。
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+
+if [ -d skills ]; then
+  if ! python3 scripts/make-manifest.py . >/dev/null; then
+    echo "pre-commit: 生成 manifest 失败（可能有未分组 skill）" >&2
+    exit 1
+  fi
+  if ! git diff --quiet -- skills/manifest.tsv; then
+    git add skills/manifest.tsv
+    echo "pre-commit: 已更新并暂存 skills/manifest.tsv"
+  fi
+fi
+
+exec ./scripts/verify.sh

@@ -1,43 +1,43 @@
-name	files	size_kb	group
-accessibility	3	28	Web 质量
-best-practices	2	18	Web 质量
-brainstorming	8	77	工程流程
-claude-api	96	2031	元技能/文档
-core-web-vitals	4	22	Web 质量
-diagram-design	290	5255	可视化
-dispatching-parallel-agents	1	5	工程流程
-doc-coauthoring	1	15	元技能/文档
-executing-plans	3	20	工程流程
-finishing-a-development-branch	1	7	工程流程
-frontend-design	2	19	元技能/文档
-i-have-adhd	3	9	规划与行为约束
-karpathy-guidelines	1	2	规划与行为约束
-mcp-builder	11	155	元技能/文档
-performance	3	23	Web 质量
-planning-with-files	34	533	规划与行为约束
-receiving-code-review	1	6	工程流程
-requesting-code-review	2	9	工程流程
-seo	2	16	Web 质量
-skill-creator	18	219	元技能/文档
-subagent-driven-development	15	63	工程流程
-systematic-debugging	6	28	工程流程
-test-driven-development	2	17	工程流程
-understand	55	481	代码理解
-understand-chat	1	4	代码理解
-understand-dashboard	1	7	代码理解
-understand-diff	1	5	代码理解
-understand-domain	2	25	代码理解
-understand-explain	1	4	代码理解
-understand-figma	3	10	代码理解
-understand-knowledge	3	43	代码理解
-understand-onboard	1	4	代码理解
-using-git-worktrees	1	6	工程流程
-vercel-composition-patterns	14	49	前端/React
-vercel-react-best-practices	76	224	前端/React
-vercel-react-view-transitions	9	119	前端/React
-verification-before-completion	1	3	工程流程
-web-design-guidelines	1	1	前端/React
-web-quality-audit	2	13	Web 质量
-webapp-testing	6	21	元技能/文档
-writing-plans	1	10	工程流程
-writing-skills	10	106	工程流程
+name	files	size_kb	digest	group
+accessibility	3	28	73ee7c57f2b8ae673a8e3f135a8da9ac980f3b6dc66c06d38ce26a5d8b4470fc	Web 质量
+best-practices	2	18	7386dceadce2a0c66e402c8a805be50c96b39d414394d36b817e47b4a51eee90	Web 质量
+brainstorming	8	77	4d6000bafec82489d1c3a63998c3138801e3fa1786205ab7cc3a36a850ca40bd	工程流程
+claude-api	96	2031	d6037a9c4381decbb32a19bc85891f8d45df8795a68dbff8261340b4bcf81600	元技能/文档
+core-web-vitals	4	22	6571e7b4c9d250c90a0c1e736b892d1b8820d75aeded6514a552f7076c067b69	Web 质量
+diagram-design	290	5255	5bae4170cc5ecbaee82657c7842cc93b3c8d1242fc373799ddc6a5ec9349a06d	可视化
+dispatching-parallel-agents	1	5	a07f1c35d25cb21d078a48f42073d2da0df25d49ba034879f807ef5e686ff955	工程流程
+doc-coauthoring	1	15	4d0f87156a34eda3df7d19b6a941f73998af6236658458907b69bdaf6127791b	元技能/文档
+executing-plans	3	20	7a595477d84d368e048e0e6fbc646e6a597c8511305d8f195ac912df31fea117	工程流程
+finishing-a-development-branch	1	7	02db5c2ad9d5c3c3345dfbf04dc85b256fca6aa67a5af1dcd615483888cd2ab1	工程流程
+frontend-design	2	19	89a6e59de80320a32e8b4c597a329ef3c503f624a2e68874bb0475dfb66dbf4b	元技能/文档
+i-have-adhd	3	9	8bde2852e1062dd5f2528d101fd552adf5dd100fe61c721b7edb9041c59af398	规划与行为约束
+karpathy-guidelines	1	2	e79ed8e00b6cde3195dc23ea00be060e48a4a4d7e016a22f42411af1663012cc	规划与行为约束
+mcp-builder	11	155	7dfe11a85160a1894205013c9fc4308c7fd8209633eb08b02002963f89cfcbdf	元技能/文档
+performance	3	23	d30ec8c96653b07419c871ccac57653ffd565392b2460efec270432495e415ba	Web 质量
+planning-with-files	34	533	979de10a3fa29da76ce0abafd6353f18bbf1a94ee2d5114eed7785c7613c4f07	规划与行为约束
+receiving-code-review	1	6	9f9b9bf6d2d5c93c20c0fbda1b43b0c667ee7f628f7aaaa94bbc100bb9dcfd95	工程流程
+requesting-code-review	2	9	de15fd681bce2e32a9fa39cf99974638291198feb38670b3eb022dce0f6f518d	工程流程
+seo	2	16	25b76e0cec1fcf4cda334287edfd89f86b4da5c140805d002047d1b75e6f8d05	Web 质量
+skill-creator	18	219	b016b0011ee9cee8ba46dfed19ccde8f1d8e0ea6edc60ea90b3962d35e8b013a	元技能/文档
+subagent-driven-development	15	63	fc298c5984e0cd69fe528dac7e934f93b4375655dd62bc5849429b69a6b83be8	工程流程
+systematic-debugging	6	28	02447720db6bb3c4c3a1d29f27700b0c6babb0f987da2fc2dd5c963206514cf7	工程流程
+test-driven-development	2	17	eacb1ee89d8231df02109de00ed2ca8bd6eec9e7ac1d937a6a0b59d307fc041e	工程流程
+understand	55	481	eea88b4fb2c1046f2dace1d1e276fde5db88490c52b731e726408490fa1a475f	代码理解
+understand-chat	1	4	aca24227c84142ae9161ec9901fe0e8b10458b0b71fadb8c7eb73eafbd96a7f5	代码理解
+understand-dashboard	1	7	d0ec988e7a3c8c120f53a844d81f013ed0061bc1a18df96bb9c108e37dec8f98	代码理解
+understand-diff	1	5	02ed49983e329cb1fa4947b91dc19cf921f3d736b8c46a46b3a44d16c2aa87bf	代码理解
+understand-domain	2	25	7cae492e35d63a60e0af83235a2fdbdc51ca10d95aa72210fbbceb703dff7ba8	代码理解
+understand-explain	1	4	fa1f5fa5f8f9460d19690f611cabbeb962b245c3800b0d9ac8c69cd4971091fc	代码理解
+understand-figma	3	10	9c3f5b660621f4a30a09b10f5d3794d75878d63f1de305e071f99880824c36da	代码理解
+understand-knowledge	3	43	23a4cba6e0a7e66bab84340b9ff3aaad6443e4f741a2e213cae90660ccae64d3	代码理解
+understand-onboard	1	4	a5b3d2d1e4a4f68e1395df684349b40917d1bdc3e9a629d26f1e1e72980a99de	代码理解
+using-git-worktrees	1	6	97b924d20b46b90bb1bd3735c405f9228390553693f112caf3cfa055a5bb334b	工程流程
+vercel-composition-patterns	14	49	8b67145fc3996d42af07ddf710c9900eb80b7bcad3aaecf008127782509006e1	前端/React
+vercel-react-best-practices	76	224	741c320ab924f3d033c763574c1a166e4318454937dce6e10015f0230830a6bf	前端/React
+vercel-react-view-transitions	9	119	53b97081e942a4bd8874817cf26f25ce4e01ad1c7a9e9efe4da8198a3a9e2224	前端/React
+verification-before-completion	1	3	29d4bd654fdc57679501bf73b2821abf4ce035c536054a3e8e90ed7ed38644c7	工程流程
+web-design-guidelines	1	1	f910cd9c88f04e87d03b2b7829b56fcf50b3be4582965f12bc163e3f6b5b59d2	前端/React
+web-quality-audit	2	13	6f5689f4fde0319710d1cbece831dd7796dab6285f9ede33de72ae3dedaf8890	Web 质量
+webapp-testing	6	21	7dd9eedc497fbf8b5634a293190b11f93cf4b80f7cd6c1a775def12deadeebb9	元技能/文档
+writing-plans	1	10	c8681161a436c809654cf4fb2290073cb612eead80a7daa7dbd9c0c1b1d25c31	工程流程
+writing-skills	10	106	6cf8a3b12e5394118c31465947c9572dbbdf56a7469feba921217e317653fa81	工程流程

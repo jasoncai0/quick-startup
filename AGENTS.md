@@ -1,3 +1,6 @@
+<!-- 由 quick-startup 维护：https://github.com/jasoncai0/quick-startup
+     本机追加的笔记可以写在文件末尾；verify 只校验 CodeGraph 块、10 条红线与规范指针。 -->
+
 <!-- CODEGRAPH_START -->
 ## CodeGraph
 
@@ -11,7 +14,7 @@ If there is no `.codegraph/` directory, skip CodeGraph entirely — indexing is 
 
 ## 后端开发规范（Java / Go，个人默认强制）
 
-完整版：`~/.dsh/backend-standards.md`（本仓库 `standards/backend-standards.md`）。做后端、数据访问、接口或迁移任务前先读完整版；以下是常驻红线。
+完整版：`~/.dsh/backend-standards.md`。做后端、数据访问、接口或迁移任务前先读完整版；以下是常驻红线。
 
 1. **禁止 N+1**：循环/遍历内不得访问 DB、缓存、RPC、HTTP；关联数据用批量 `IN` / `Preload` 一次取。查询条数不得随结果行数增长（不设固定条数上限，但要可解释、稳定，PR 说明）；测试用 1 行与 N 行数据断言 SQL 条数相同。
 2. **默认不 Join**：禁止 3 表及以上 Join；2 表 Join 必须同时满足：驱动表过滤后 ≤1000 行、连接列有索引且类型一致、`EXPLAIN` 无全表/临时表/filesort、列明确、有超时；跨库/分片禁 Join；不得用 Join 解 N+1。报表走数仓。

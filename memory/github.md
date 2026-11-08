@@ -205,7 +205,16 @@ $GH api repos/<owner>/<repo> --jq .license.spdx_id
 | 另一个账号名 | 备用/小号 | 「另一个空账号」 |
 
 **提交身份也是上传内容**：`git log` 会永久带上作者邮箱。公开仓库建议统一用
-`<id>+<username>@users.noreply.github.com`。已推送的历史要改写：
+`<id>+<username>@users.noreply.github.com`。
+
+第一步是**建仓后立刻设仓库级身份**（不要依赖全局配置，全局往往是私人邮箱）：
+
+```bash
+git config user.name  "<username>"
+git config user.email "<id>+<username>@users.noreply.github.com"
+```
+
+已经推上去的历史要改写：
 
 ```bash
 git bundle create /tmp/backup.bundle --all          # 先备份

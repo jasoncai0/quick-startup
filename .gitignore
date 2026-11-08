@@ -1,0 +1,23 @@
+# 密钥与凭据：永不入库
+.credentials.yaml
+**/.credentials.yaml
+.claude/settings.json
+**/settings.local.json
+.env
+.env.*
+*.pem
+*.key
+*.p12
+
+# 系统 / 工具垃圾
+.DS_Store
+**/.DS_Store
+__pycache__/
+*.pyc
+node_modules/
+.venv/
+venv/
+
+# 本地备份
+*.bak
+backups/

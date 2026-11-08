@@ -1,0 +1,19 @@
+# CodeGraph MCP 配置（DSH home 级 Cordis patch）
+#
+# 本文件是参考配置；`scripts/install.sh` 会按本机实际的 codegraph 路径
+# 生成同名片段并注入 ~/.dsh/cordis.patch.yml（已存在 mcp-codegraph 时跳过）。
+#
+# 作用域：~/.dsh/cordis.patch.yml 是 home 级 patch，对所有 profile 生效。
+# 前置：codegraph CLI 已安装（npm i -g @colbymchenry/codegraph 或 npm 全局）。
+# 说明：command 用绝对路径，避免 GUI 应用的 PATH 与登录 shell 不一致。
+
+- insert:
+    - id: mcp-codegraph
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: codegraph
+        transport: stdio
+        command: /opt/homebrew/lib/node_modules/@colbymchenry/codegraph/node_modules/@colbymchenry/codegraph-darwin-arm64/bin/codegraph
+        args:
+          - serve
+          - --mcp

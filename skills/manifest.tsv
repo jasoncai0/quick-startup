@@ -1,0 +1,43 @@
+name	files	size_kb	group
+accessibility	3	28	Web 质量
+best-practices	2	18	Web 质量
+brainstorming	8	77	工程流程
+claude-api	96	2031	元技能/文档
+core-web-vitals	4	22	Web 质量
+diagram-design	290	5255	可视化
+dispatching-parallel-agents	1	5	工程流程
+doc-coauthoring	1	15	元技能/文档
+executing-plans	3	20	工程流程
+finishing-a-development-branch	1	7	工程流程
+frontend-design	2	19	元技能/文档
+i-have-adhd	3	9	规划与行为约束
+karpathy-guidelines	1	2	规划与行为约束
+mcp-builder	11	155	元技能/文档
+performance	3	23	Web 质量
+planning-with-files	34	533	规划与行为约束
+receiving-code-review	1	6	工程流程
+requesting-code-review	2	9	工程流程
+seo	2	16	Web 质量
+skill-creator	18	219	元技能/文档
+subagent-driven-development	15	63	工程流程
+systematic-debugging	6	28	工程流程
+test-driven-development	2	17	工程流程
+understand	55	481	代码理解
+understand-chat	1	4	代码理解
+understand-dashboard	1	7	代码理解
+understand-diff	1	5	代码理解
+understand-domain	2	25	代码理解
+understand-explain	1	4	代码理解
+understand-figma	3	10	代码理解
+understand-knowledge	3	43	代码理解
+understand-onboard	1	4	代码理解
+using-git-worktrees	1	6	工程流程
+vercel-composition-patterns	14	49	前端/React
+vercel-react-best-practices	76	224	前端/React
+vercel-react-view-transitions	9	119	前端/React
+verification-before-completion	1	3	工程流程
+web-design-guidelines	1	1	前端/React
+web-quality-audit	2	13	Web 质量
+webapp-testing	6	21	元技能/文档
+writing-plans	1	10	工程流程
+writing-skills	10	106	工程流程

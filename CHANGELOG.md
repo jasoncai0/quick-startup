@@ -28,6 +28,9 @@
 ### Fixed
 
 - `verify.sh` 早期版本用 `find -exec test` 判断 `SKILL.md`，会把 skill 内的子目录误判为缺失。
+- `verify.sh` 用 `find -type d` 统计已安装 skill，漏算软链安装（本机 42 个只数到 32 个）。
+- **locale 敏感**：`$var（` 这类写法在 macOS runner 的 C locale 下会把全角括号吞进变量名，
+  报 `unbound variable`。统一改为 `${var}`，并加仓库级检查防止回潮。
 
 ## [0.1.0] - 2026-11-09
 

@@ -160,6 +160,8 @@ git add -A && git commit && git push
 - `understand*` 与 `diagram-design` 的 `/command` 提示词（`$ARGUMENTS` 等）是 Claude Code 约定，DSH 不做参数替换。
 - CodeGraph 的 `command` 是 macOS/Homebrew 绝对路径；Linux 需改 `mcp/` 配置（`install.sh` 会优先取 `command -v codegraph`）。
 - `verify.sh` 检查本机安装时假定 `~/.dsh` 是可写目录；只读环境请用 `DSH_HOME` 指向临时目录。
+- shell 脚本里变量后紧跟全角标点必须写 `${var}`：CI 在 C locale 下跑，`$var（` 会被解析成
+  变量名的一部分（本仓库已加检查，`verify.sh` 第 10 项）。
 
 ## 许可证
 

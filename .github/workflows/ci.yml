@@ -27,6 +27,11 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: 固定 Python 版本
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
       - name: 锁文件必须是最新的
         run: |
           python3 scripts/make-manifest.py .

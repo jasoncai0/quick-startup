@@ -60,7 +60,7 @@ for dir in "$REPO"/skills/*/; do
 done
 ok "$n 个 skill → $SKILLS_DST"
 
-# ── 2. 记忆：AGENTS.md ───────────────────────────────────────────────────────
+# ── 2. 记忆：AGENTS.md（合并，不覆盖本机追加内容）───────────────────────────
 step "安装全局记忆 AGENTS.md"
 if [ -f "$DSH_HOME/AGENTS.md" ] && cmp -s "$REPO/AGENTS.md" "$DSH_HOME/AGENTS.md"; then
   ok "已是最新，跳过"
@@ -70,8 +70,12 @@ else
     run cp "$DSH_HOME/AGENTS.md" "$BACKUP/AGENTS.md"
     warn "旧文件已备份：$BACKUP/AGENTS.md"
   fi
-  run cp "$REPO/AGENTS.md" "$DSH_HOME/AGENTS.md"
-  ok "写入 $DSH_HOME/AGENTS.md"
+  if (( DRY_RUN )); then
+    python3 "$REPO/scripts/merge_agents.py" "$REPO/AGENTS.md" "$DSH_HOME/AGENTS.md" --check
+  else
+    python3 "$REPO/scripts/merge_agents.py" "$REPO/AGENTS.md" "$DSH_HOME/AGENTS.md"
+  fi
+  ok "写入 $DSH_HOME/AGENTS.md（本机追加内容会保留）"
 fi
 
 # ── 3. 规范 ──────────────────────────────────────────────────────────────────

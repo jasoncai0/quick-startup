@@ -1,7 +1,7 @@
 # quick-startup —— 日常入口
 # 依赖：bash 3.2+、python3（脚本里没有别的东西）
 .DEFAULT_GOAL := help
-.PHONY: help all install verify test export manifest docs lint secret clean
+.PHONY: help all install verify test export manifest docs license doctor lint secret clean
 
 help: ## 显示可用目标
 	@awk 'BEGIN {FS = ":.*## "; printf "\n用法：make <目标>\n\n"} \
@@ -27,6 +27,12 @@ manifest: ## 重新生成 skills/manifest.tsv
 
 docs: ## 检查 README / VERSION / CHANGELOG 一致性
 	python3 scripts/check_docs.py .
+
+license: ## 校验 LICENSE 与上游许可快照
+	python3 scripts/check_license.py .
+
+doctor: ## 环境体检（只读）：安装完整性、断链、MCP、工具链
+	./scripts/doctor.sh
 
 lint: ## shellcheck + python 语法
 	@command -v shellcheck >/dev/null 2>&1 \

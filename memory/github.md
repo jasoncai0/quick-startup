@@ -68,7 +68,11 @@ git -c credential.helper="!GH_CONFIG_DIR=<...>/.tools/ghconfig <...>/gh auth git
 结果 GitHub 把它识别成 `NOASSERTION`（licensee 无法匹配），仓库页不显示 MIT 标识。
 
 - 版权范围说明放 `THIRD-PARTY-NOTICES.md` 或 README，**不要**放 `LICENSE`。
-- 验证：`gh api repos/<owner>/<repo> --jq .license.spdx_id` 应为 `MIT`。
+- 验证：`make license`（本地逐行比对 MIT 原文）+ `gh api repos/<owner>/<repo> --jq .license.spdx_id` 应为 `MIT`。
+
+> 已自动化：`scripts/check_license.py` 逐行比对 MIT 标准文本，任何追加、翻译、改字都会让 CI 变红。
+> 这个检查本身也踩过坑——最初用「行数 + 是否含中文」判断，结果误伤了 `Copyright (c) 2026 蔡振盛`
+> 这一行。**启发式校验会误伤自己**，能用标准文本比对就别猜。
 
 ---
 
@@ -147,6 +151,9 @@ git -c credential.helper="!GH_CONFIG_DIR=$GH_CONFIG_DIR $GH auth git-credential"
 $GH run list --limit 5
 $GH run view <run-id> --log-failed
 
+# 本机环境体检（只读；不对劲先跑它）
+make doctor
+
 # 发布
 $GH release create v1.0.0 --title "v1.0.0" --notes-file CHANGELOG.md
 
@@ -173,6 +180,7 @@ $GH api repos/<owner>/<repo> --jq .license.spdx_id
 
 季度复核清单：
 
+- [ ] `make doctor` 全绿（安装完整性、断链、MCP 路径）
 - [ ] `gh --version` 是否有新版（二进制在 `.tools/`，替换即可）
 - [ ] token scope 是否仍是最小集（`repo, read:org, gist`）
 - [ ] 每个仓库的可见性是否仍合适（尤其含个人数据的）

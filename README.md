@@ -47,6 +47,7 @@ quick-startup/
 │   ├── SOURCES.md                 # 上游仓库 + 固定 commit + 本地改动说明
 │   ├── manifest.tsv               # 锁文件：name/files/size_kb/digest/group
 │   └── <skill-name>/SKILL.md …
+├── licenses/                      # 9 个上游的许可快照（合规不依赖上游还活着）
 ├── scripts/
 │   ├── install.sh                 # 安装/更新（幂等、备份、--dry-run）
 │   ├── verify.sh                  # 三层校验（仓库/安装/密钥）
@@ -55,9 +56,12 @@ quick-startup/
 │   ├── dir_digest.py              # 目录内容指纹
 │   ├── check_manifest.py          # 锁文件 ↔ 磁盘 ↔ 本机安装 三方一致
 │   ├── check_docs.py              # README/VERSION/CHANGELOG 防漂移
-│   ├── check_agents.py            # 记忆块与红线语义校验
+│   ├── check_agents.py            # 记忆块与编号约定语义校验
+│   ├── check_license.py           # LICENSE 必须逐行等于 MIT 原文
+│   ├── merge_agents.py            # 合并 AGENTS.md，保留本机追加内容
+│   ├── doctor.sh                  # 环境体检（只读，可 --json）
 │   └── secret-patterns.txt        # 密钥扫描规则
-├── tests/run.sh                   # 37 项集成测试（临时 DSH_HOME，不碰真实环境）
+├── tests/run.sh                   # 53 项集成测试（临时 DSH_HOME，不碰真实环境）
 ├── .githooks/pre-commit           # 可选本地门禁
 └── .github/workflows/ci.yml       # ubuntu + macos 双平台
 ```
@@ -68,8 +72,10 @@ quick-startup/
 
 | 门禁 | 命令 | 覆盖什么 |
 |---|---|---|
-| 集成测试 | `make test` | **37 项**：首次安装、幂等、dry-run、覆盖前备份、漂移检测、密钥扫描、反向导出、未知参数、含空格路径 |
-| 三层校验 | `make verify` | **17 项**：① 仓库完整性 ② 本机安装一致性 ③ 密钥扫描 |
+| 集成测试 | `make test` | **53 项**：首次安装、幂等、dry-run、覆盖前备份、漂移检测、密钥扫描、反向导出、记忆合并、环境体检、许可证守卫、含空格路径 |
+| 三层校验 | `make verify` | **18 项**：① 仓库完整性 ② 本机安装一致性 ③ 密钥扫描 |
+| 环境体检 | `make doctor` | 安装完整性、断链、MCP 可执行路径、codegraph/gh/python 版本；只读，`--json` 可供脚本消费 |
+| 许可证守卫 | `make license` | LICENSE 必须**逐行等于 MIT 原文**（防 NOASSERTION）+ 9 个上游许可快照齐全 |
 | 锁文件 | `python3 scripts/check_manifest.py --repo .` | 每个 skill 的内容指纹（`digest`）与锁文件一致；未登记/已失效/未分组都报错 |
 | 文档防漂移 | `python3 scripts/check_docs.py .` | README 的 skill 数量、42 个名字、规范行数、相对链接、`VERSION` 与 `CHANGELOG` 必须与仓库现实一致 |
 | 静态检查 | `make lint` | shellcheck（0 告警）+ Python 语法 |
@@ -105,7 +111,9 @@ quick-startup/
 `scripts/install.sh` 做四件事，前三件可单独回退：
 
 1. **skills** → `~/.dsh/skills/<name>/`：逐目录 `rm -rf` 后整目录复制（不做软链，避免外部 checkout 被删后断链）。
-2. **AGENTS.md** → `~/.dsh/AGENTS.md`：先比对，内容不同才覆盖，旧文件备份到 `~/.dsh/backups/quick-startup-<时间戳>/`。
+2. **AGENTS.md** → `~/.dsh/AGENTS.md`：**合并不覆盖**——仓库内容为准，本机独有的行收进文末
+   「## 本机追加（安装器保留）」段（重复安装不叠加），旧文件仍备份到 `~/.dsh/backups/quick-startup-<时间戳>/`。
+   这样服务器地址、内网路径这类**不该进公开仓库**的本机记忆不会被安装器吞掉。
 3. **规范** → `~/.dsh/backend-standards.md`。
 4. **MCP** → 往 `~/.dsh/cordis.patch.yml` 追加 `mcp-codegraph` 段；已存在同名 id 就跳过，`codegraph` 未安装则跳过并提示。
 
@@ -145,6 +153,7 @@ git add -A && git commit && git push
 - 软链 skill 在仓库里存的是**实体拷贝**；上游更新靠 `git -C ~/.diagram-design/repo pull` 后重新导出。
 - 升级单个 skill：`git clone --depth 1 <上游>` 后 `cp -R` 到 `~/.dsh/skills/`，再 `make export`。
 - 改了 skill 内容却忘了更新锁文件，CI 的「锁文件必须是最新的」会直接挂。
+- 环境不对劲先跑 `make doctor`：它只读，能直接指出是断链、MCP 路径失效、还是记忆过期。
 
 待办与下一步见 [`ROADMAP.md`](ROADMAP.md)。
 

@@ -40,8 +40,11 @@ T_code() {
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/qs-test.XXXXXX")"
 trap '[ "${KEEP:-0}" = "1" ] || rm -rf "$WORK"' EXIT
 
-# 假 codegraph 路径：让 MCP 注入行为与机器无关
-export CODEGRAPH_BIN="/opt/fake/bin/codegraph"
+# codegraph 桩：可执行，让 MCP 注入与 doctor 的路径检查可离线验证
+mkdir -p "$WORK/bin"
+printf '#!/bin/sh\n echo "stub 0.0.0"\n' > "$WORK/bin/codegraph"
+chmod +x "$WORK/bin/codegraph"
+export CODEGRAPH_BIN="$WORK/bin/codegraph"
 export DSH_HOME="$WORK/dsh"
 
 head2 "1. 首次安装"
@@ -69,7 +72,8 @@ printf '\n<!-- gh marker -->\n' >> "$DSH_HOME/github-usage.md"
 T "覆盖前备份：install 成功" "$REPO/scripts/install.sh"
 T "生成备份目录" test -d "$DSH_HOME/backups"
 T "备份保留被覆盖内容" grep -rq 'test marker' "$DSH_HOME/backups"
-T "AGENTS.md 恢复为仓库版" cmp -s "$REPO/AGENTS.md" "$DSH_HOME/AGENTS.md"
+T "AGENTS.md 仓库内容完整" python3 "$REPO/scripts/check_agents.py" "$REPO/AGENTS.md" "$DSH_HOME/AGENTS.md"
+T "本机改动未被吞掉" grep -q 'test marker' "$DSH_HOME/AGENTS.md"
 T "GitHub 记忆也备份并恢复" cmp -s "$REPO/memory/github.md" "$DSH_HOME/github-usage.md"
 T "备份保留 GitHub 记忆改动" grep -rq 'gh marker' "$DSH_HOME/backups"
 
@@ -96,6 +100,9 @@ T_fail "植入假令牌后 verify 失败" env DSH_HOME="$DSH_HOME" "$SCAN/script
 T "输出指名命中文件" bash -c "DSH_HOME='$DSH_HOME' '$SCAN/scripts/verify.sh' 2>&1 | grep -q 'leak-fixture'"
 rm -f "$SCAN/skills/leak-fixture.txt"
 T "移除后 verify 成功" env DSH_HOME="$DSH_HOME" "$SCAN/scripts/verify.sh"
+printf '\n---\n\n本许可仅覆盖原创部分。\n' >> "$SCAN/LICENSE"
+T_fail "LICENSE 被追加说明后 verify 失败" env DSH_HOME="$DSH_HOME" "$SCAN/scripts/verify.sh"
+T "失败原因指向 LICENSE" bash -c "DSH_HOME='$DSH_HOME' '$SCAN/scripts/verify.sh' 2>&1 | grep -q 'MIT'"
 
 head2 "7. 反向导出"
 cp -R "$REPO" "$WORK/export-repo"
@@ -104,13 +111,36 @@ T "export-from-local 成功" env DSH_HOME="$DSH_HOME" "$WORK/export-repo/scripts
 T "改动回流到仓库副本" grep -q 'local tweak' "$WORK/export-repo/skills/seo/SKILL.md"
 T "导出后副本 verify 通过" env DSH_HOME="$DSH_HOME" "$WORK/export-repo/scripts/verify.sh"
 
-head2 "8. 参数与边界"
+head2 "8. 环境体检 doctor"
+T "doctor 成功后退出 0" env DSH_HOME="$DSH_HOME" "$REPO/scripts/doctor.sh"
+T "doctor 输出体检结果" bash -c "DSH_HOME='$DSH_HOME' '$REPO/scripts/doctor.sh' 2>&1 | grep -q '体检结果'"
+mv "$DSH_HOME/AGENTS.md" "$DSH_HOME/AGENTS.md.bak"
+T_fail "doctor 能发现缺失的 AGENTS.md" env DSH_HOME="$DSH_HOME" "$REPO/scripts/doctor.sh"
+mv "$DSH_HOME/AGENTS.md.bak" "$DSH_HOME/AGENTS.md"
+T "还原后 doctor 恢复通过" env DSH_HOME="$DSH_HOME" "$REPO/scripts/doctor.sh"
+env DSH_HOME="$DSH_HOME" "$REPO/scripts/doctor.sh" --json > "$WORK/doctor.json" 2>/dev/null
+T "doctor --json 可解析且 fail=0" python3 -c "import json,sys; d=json.load(open('$WORK/doctor.json')); sys.exit(0 if d['fail']==0 and d['pass']>0 else 1)"
+
+head2 "9. 许可证守卫"
+T "仓库 LICENSE 通过" python3 "$REPO/scripts/check_license.py" "$REPO"
+T "上游许可快照齐全" test -f "$REPO/licenses/README.md"
+
+head2 "10. 参数与边界"
 T_code "install.sh 未知参数返回 2" 2 "$REPO/scripts/install.sh" --bogus
 T "install.sh --help 返回 0" "$REPO/scripts/install.sh" --help
 T_code "verify.sh 未知参数返回 2" 2 "$REPO/scripts/verify.sh" --bogus
 T "verify.sh --help 返回 0" "$REPO/scripts/verify.sh" --help
 T "DSH_HOME 含空格可安装" env DSH_HOME="$WORK/with space/dsh" "$REPO/scripts/install.sh"
 T "含空格的安装目录 verify 成功" env DSH_HOME="$WORK/with space/dsh" "$REPO/scripts/verify.sh" --require-install
+
+head2 "11. AGENTS.md 合并（不吞本机追加）"
+printf '\n## 本机笔记\n\n只属于这台机器的一行。\n' >> "$DSH_HOME/AGENTS.md"
+T "带本机笔记重装成功" "$REPO/scripts/install.sh"
+T "仓库内容仍完整" python3 "$REPO/scripts/check_agents.py" "$REPO/AGENTS.md" "$DSH_HOME/AGENTS.md"
+T "本机追加被保留" grep -q '只属于这台机器的一行' "$DSH_HOME/AGENTS.md"
+T "标记段只出现一次" test "$(grep -c '本机追加（安装器保留）' "$DSH_HOME/AGENTS.md")" -eq 1
+T "再次重装不叠加" "$REPO/scripts/install.sh"
+T "仍只有一处标记段" test "$(grep -c '本机追加（安装器保留）' "$DSH_HOME/AGENTS.md")" -eq 1
 
 printf '\n%s结果%s  pass=%d  fail=%d\n' "$b" "$o" "$pass" "$fail"
 [ "$fail" -eq 0 ] || exit 1

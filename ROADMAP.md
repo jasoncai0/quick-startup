@@ -6,24 +6,25 @@
 
 - **0.2.0**（2026-11-09）：完成测试、CI、锁文件、文档防漂移、许可证合规基线。
 - **0.3.0**（2026-11-09）：GitHub 使用记忆入库并接入安装/校验（`memory/github.md`）。
+- **0.4.0**（2026-11-09）：`doctor.sh` 环境体检、`check_license.py` 许可守卫、`licenses/` 上游快照、
+  `merge_agents.py` 记忆合并。
 
-## 0.4.0 — 升级与合规
+## 0.5.0 — 升级与合规
 
 - [ ] `scripts/upgrade-skill.sh <name>`：按 `skills/SOURCES.md` 里 pin 的 commit 重新拉取单个 skill，
       自动 `git diff --stat` 预览 + `make export`，避免手工 `cp -R` 出错。
 - [ ] `scripts/check-upstream.py`：对每个上游仓库查询「当前 HEAD vs pinned commit」，
       输出可升级列表（只报告，不自动改），作为季度复核入口。
-- [ ] `skills/LICENSES/`：把各上游 LICENSE 原文抓进仓库（目前 6 个 Apache 组件有，其余 36 个没有），
-      让合规不再依赖「上游根目录还在」。
+- [x] `licenses/`：9 个上游的许可快照（7 份原文 + 2 份授权说明）。
 - [ ] `skills/manifest.tsv` 增加 `upstream`、`commit` 两列，让 SOURCES.md 的表格与锁文件同源。
 
-## 0.4.x — 环境体检
+## 0.5.x — 环境体检
 
-- [ ] `scripts/doctor.sh`：一次性体检 —— DSH 版本、`~/.dsh` 布局、codegraph 版本与遥测状态、
-      Python Playwright/Chromium、软链是否断、`cordis.patch.yml` 是否被别的 patch 覆盖。
+- [x] `scripts/doctor.sh`：布局、断链、MCP 路径、codegraph/python/gh 体检。
+- [ ] `doctor.sh` 增补：DSH 版本、Python Playwright/Chromium 可用性、cordis patch 是否被覆盖。
 - [ ] `doctor.sh --json` 输出机器可读结果，便于以后接进 DSH 的会话启动检查。
 
-## 0.5.0 — 跨平台
+## 0.6.0 — 跨平台
 
 - [ ] Linux 支持：`install.sh` 在无 Homebrew 的机器上自动探测 `codegraph` 路径；
       CI 增加 `ubuntu-latest` 下的「完整安装 + verify」用例（当前只在临时目录跑）。

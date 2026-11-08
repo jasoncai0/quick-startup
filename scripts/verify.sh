@@ -58,6 +58,7 @@ check "AGENTS.md 指向后端规范" grep -q 'backend-standards.md' "$REPO/AGENT
 check "skills/SOURCES.md 存在" test -s "$REPO/skills/SOURCES.md"
 check_out "锁文件与仓库内容一致" python3 "$REPO/scripts/check_manifest.py" --repo "$REPO"
 check_out "文档与实现一致" python3 "$REPO/scripts/check_docs.py" "$REPO"
+check_out "LICENSE 为 MIT 原文且许可快照齐全" python3 "$REPO/scripts/check_license.py" "$REPO"
 
 locale_hits=$(grep -nE '\$[A-Za-z_][A-Za-z0-9_]*[^ -~]' "$REPO"/scripts/*.sh "$REPO"/tests/run.sh 2>/dev/null | head -3)
 if [ -z "$locale_hits" ]; then

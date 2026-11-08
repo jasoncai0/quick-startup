@@ -3,6 +3,26 @@
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 `VERSION` 文件与本节最新版本号必须一致（由 `scripts/check_docs.py` 强制）。
 
+## [0.4.0] - 2026-11-09
+
+### Added
+
+- `scripts/doctor.sh`：环境体检（只读，支持 `--json`）——安装完整性、断链、MCP command 可执行性、
+  codegraph 版本与遥测、python/gh 可用性。缺可选工具只记 WARN，不误判失败。
+- `scripts/check_license.py`：LICENSE 必须**逐行等于 MIT 标准文本**（只允许版权行与空行不同）。
+  不靠行数/CJK 之类启发式——版权行本来就可能含中文名。`--github owner/repo` 还能核对
+  GitHub 侧的 `spdx_id`，把「识别成 NOASSERTION」挡在推送前。
+- `licenses/`：9 个上游的许可快照（7 份原文 + 2 份无 LICENSE 文件的授权说明），
+  合规不再依赖上游仓库还活着；`licenses/README.md` 给出映射表与复核命令。
+- `scripts/merge_agents.py`：安装 AGENTS.md 时**合并而非覆盖**，本机追加内容收进
+  「## 本机追加（安装器保留）」段，重复安装不叠加。
+
+### Fixed
+
+- `skills/LICENSES/` 被当成第 43 个 skill（`skills/` 下只该有 skill）——移到仓库根 `licenses/`。
+- `doctor.sh` 新增的 `$DSH_HOME（` 触发 locale 风险写法，回归门禁当场抓到并修正。
+- 安装器会静默覆盖 `~/.dsh/AGENTS.md` 里的本机内容（真实风险：服务器地址、内网路径）。
+
 ## [0.3.0] - 2026-11-09
 
 ### Added

@@ -44,12 +44,12 @@ command -v python3 >/dev/null 2>&1 || { echo "需要 python3" >&2; exit 2; }
 head2 "1. 仓库完整性"
 repo_skills=$(find "$REPO/skills" -maxdepth 1 -mindepth 1 -type d | wc -l | tr -d ' ')
 manifest_rows=$(( $(wc -l < "$REPO/skills/manifest.tsv" 2>/dev/null | tr -d ' ') - 1 ))
-check "skills/ 目录数与锁文件一致（$repo_skills / $manifest_rows）" test "$repo_skills" -eq "$manifest_rows"
+check "skills/ 目录数与锁文件一致（$repo_skills / ${manifest_rows}）" test "$repo_skills" -eq "$manifest_rows"
 check "至少存在一个 skill" test "$repo_skills" -gt 0
 
 missing_skillmd=0
 for d in "$REPO"/skills/*/; do [ -f "${d}SKILL.md" ] || missing_skillmd=$((missing_skillmd + 1)); done
-check "每个 skill 都有 SKILL.md（缺失 $missing_skillmd）" [ "$missing_skillmd" -eq 0 ]
+check "每个 skill 都有 SKILL.md（缺失 ${missing_skillmd}）" [ "$missing_skillmd" -eq 0 ]
 
 std_lines=$(wc -l < "$REPO/standards/backend-standards.md" 2>/dev/null | tr -d ' ')
 check "规范存在且 ≥200 行（$std_lines 行）" [ "${std_lines:-0}" -ge 200 ]
@@ -59,7 +59,15 @@ check "skills/SOURCES.md 存在" test -s "$REPO/skills/SOURCES.md"
 check_out "锁文件与仓库内容一致" python3 "$REPO/scripts/check_manifest.py" --repo "$REPO"
 check_out "文档与实现一致" python3 "$REPO/scripts/check_docs.py" "$REPO"
 
-head2 "2. 本机安装一致性（$DSH_HOME）"
+locale_hits=$(grep -nE '\$[A-Za-z_][A-Za-z0-9_]*[^ -~]' "$REPO"/scripts/*.sh "$REPO"/tests/run.sh 2>/dev/null | head -3)
+if [ -z "$locale_hits" ]; then
+  ok "shell 脚本无「变量紧邻非 ASCII」写法（locale 安全）"
+else
+  bad "存在 locale 风险写法：\$var 后紧跟全角字符，请改成 \${var}"
+  note "$locale_hits"
+fi
+
+head2 "2. 本机安装一致性（${DSH_HOME}）"
 if [ ! -d "$SKILLS_DST" ]; then
   if [ "$REQUIRE_INSTALL" -eq 1 ]; then
     bad "未安装：$SKILLS_DST 不存在（先跑 scripts/install.sh）"
@@ -69,7 +77,7 @@ if [ ! -d "$SKILLS_DST" ]; then
 else
   inst_skills=0
   for d in "$SKILLS_DST"/*/; do [ -d "$d" ] && inst_skills=$((inst_skills + 1)); done
-  check "已安装 skill 数与仓库一致（$inst_skills / $repo_skills）" [ "$inst_skills" -eq "$repo_skills" ]
+  check "已安装 skill 数与仓库一致（$inst_skills / ${repo_skills}）" [ "$inst_skills" -eq "$repo_skills" ]
   check_out "每个 skill 与锁文件逐字节一致" python3 "$REPO/scripts/check_manifest.py" --repo "$REPO" --installed "$SKILLS_DST"
   check_out "已安装 AGENTS.md 包含仓库全部内容" python3 "$REPO/scripts/check_agents.py" "$REPO/AGENTS.md" "$DSH_HOME/AGENTS.md"
   check "已安装规范与仓库一致" cmp -s "$REPO/standards/backend-standards.md" "$DSH_HOME/backend-standards.md"

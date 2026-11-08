@@ -18,7 +18,7 @@ for arg in "$@"; do
   case "$arg" in
     -n|--dry-run) DRY_RUN=1 ;;
     -h|--help) sed -n '2,10p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
-    *) echo "未知参数：$arg（可用 --dry-run / --help）" >&2; exit 2 ;;
+    *) echo "未知参数：${arg}（可用 --dry-run / --help）" >&2; exit 2 ;;
   esac
 done
 
@@ -38,7 +38,7 @@ if [ -d "$DSH_HOME" ] && [ ! -w "$DSH_HOME" ]; then
   die "$DSH_HOME 不可写（检查权限，或设置 DSH_HOME 指向别处）"
 fi
 if [ ! -d "$DSH_HOME" ] && (( ! DRY_RUN )); then
-  mkdir -p "$DSH_HOME" 2>/dev/null || die "无法创建 $DSH_HOME（父目录不可写？）"
+  mkdir -p "$DSH_HOME" 2>/dev/null || die "无法创建 ${DSH_HOME}（父目录不可写？）"
 fi
 
 printf '\nquick-startup → %s%s\n\n' "$DSH_HOME" "$([[ $DRY_RUN == 1 ]] && echo '  (dry-run)')"
@@ -50,7 +50,7 @@ n=0
 for dir in "$REPO"/skills/*/; do
   name="$(basename "$dir")"
   if [ ! -f "$dir/SKILL.md" ]; then
-    warn "跳过 $name：没有 SKILL.md"
+    warn "跳过 ${name}：没有 SKILL.md"
     continue
   fi
   run rm -rf "$SKILLS_DST/$name"

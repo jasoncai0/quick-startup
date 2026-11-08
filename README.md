@@ -68,7 +68,7 @@ quick-startup/
 | 门禁 | 命令 | 覆盖什么 |
 |---|---|---|
 | 集成测试 | `make test` | **33 项**：首次安装、幂等、dry-run、覆盖前备份、漂移检测、密钥扫描、反向导出、未知参数、含空格路径 |
-| 三层校验 | `make verify` | **15 项**：① 仓库完整性 ② 本机安装一致性 ③ 密钥扫描 |
+| 三层校验 | `make verify` | **16 项**：① 仓库完整性 ② 本机安装一致性 ③ 密钥扫描 |
 | 锁文件 | `python3 scripts/check_manifest.py --repo .` | 每个 skill 的内容指纹（`digest`）与锁文件一致；未登记/已失效/未分组都报错 |
 | 文档防漂移 | `python3 scripts/check_docs.py .` | README 的 skill 数量、42 个名字、规范行数、相对链接、`VERSION` 与 `CHANGELOG` 必须与仓库现实一致 |
 | 静态检查 | `make lint` | shellcheck（0 告警）+ Python 语法 |

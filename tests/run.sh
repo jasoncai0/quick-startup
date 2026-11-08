@@ -27,14 +27,14 @@ T() {
 T_fail() {
   local desc="$1"; shift
   local out
-  if out="$("$@" 2>&1)"; then bad "$desc（期望失败，实际成功）"; dump "$out"; else ok "$desc"; fi
+  if out="$("$@" 2>&1)"; then bad "${desc}（期望失败，实际成功）"; dump "$out"; else ok "$desc"; fi
 }
 # T_code：命令退出码必须等于期望值
 T_code() {
   local desc="$1" want="$2"; shift 2
   local out got
   out="$("$@" 2>&1)"; got=$?
-  if [ "$got" -eq "$want" ]; then ok "$desc"; else bad "$desc（exit=$got，期望 $want）"; dump "$out"; fi
+  if [ "$got" -eq "$want" ]; then ok "$desc"; else bad "${desc}（exit=${got}，期望 ${want}）"; dump "$out"; fi
 }
 
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/qs-test.XXXXXX")"

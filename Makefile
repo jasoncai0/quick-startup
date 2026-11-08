@@ -1,7 +1,7 @@
 # quick-startup —— 日常入口
 # 依赖：bash 3.2+、python3（脚本里没有别的东西）
 .DEFAULT_GOAL := help
-.PHONY: help all install verify test export manifest docs license doctor lint secret clean
+.PHONY: help all install verify test export manifest docs license privacy doctor lint secret clean
 
 help: ## 显示可用目标
 	@awk 'BEGIN {FS = ":.*## "; printf "\n用法：make <目标>\n\n"} \
@@ -31,6 +31,9 @@ docs: ## 检查 README / VERSION / CHANGELOG 一致性
 license: ## 校验 LICENSE 与上游许可快照
 	python3 scripts/check_license.py .
 
+privacy: ## 脱敏检查（工作区 + 全部历史）
+	python3 scripts/check_privacy.py . --history
+
 doctor: ## 环境体检（只读）：安装完整性、断链、MCP、工具链
 	./scripts/doctor.sh
 
@@ -39,7 +42,8 @@ lint: ## shellcheck + ruff + python 语法
 	  && shellcheck -x scripts/*.sh tests/run.sh \
 	  || echo "（未安装 shellcheck，跳过；CI 会跑）"
 	@python3 -m py_compile scripts/*.py && echo "python 语法 OK"
-	@ruff check --select E9,F scripts/ 2>/dev/null \
+	@command -v ruff >/dev/null 2>&1 \
+	  && ruff check --select E9,F scripts/ \
 	  || echo "（未安装 ruff，跳过静态检查；CI 会跑）"
 
 secret: ## 只跑密钥扫描

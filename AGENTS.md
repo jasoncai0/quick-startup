@@ -33,7 +33,7 @@ If there is no `.codegraph/` directory, skip CodeGraph entirely — indexing is 
 
 完整版：`~/.dsh/github-usage.md`。建仓、提交、推送、发布、改 CI 前先读完整版；下面是常驻约定。
 
-1. **账号**：个人仓库一律归 `jasoncai0`（邮箱 `you@example.com`，归属看邮箱不看 name）；`another-account` 是 0 仓库的空号，别用。
+1. **账号**：个人仓库一律归 `jasoncai0`（归属看提交邮箱，不看 name）；本机另有一个 0 仓库的空账号，别用，避免权限/头像混淆。
 2. **分支与 PR**：只有 `main`；个人仓库不开 PR，直接 commit → push → 看 CI 结论，红了当场修。
 3. **推送**：HTTPS + `GH_CONFIG_DIR=<workspace>/.tools/ghconfig` 的 gh 凭据；token 绝不写进 remote URL 或脚本。
 4. **提交**：`type: 一句话` + `-` 列改动；修 bug 必须写清「哪个门禁抓到的、怎么验证」。

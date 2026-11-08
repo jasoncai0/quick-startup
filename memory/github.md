@@ -11,9 +11,9 @@
 | 项 | 值 |
 |---|---|
 | 主账号 | `jasoncai0`（`github.com/jasoncai0`），所有个人仓库归它 |
-| 提交邮箱 | `you@example.com`（GitHub 已验证，`git config --global user.email` 一致） |
-| 显示名 | git 全局是 `another-account`，GitHub 账号是 `jason cai`；**归属看邮箱，不看 name** |
-| 另一个账号 | `another-account`：0 个仓库，**不要用**（容易搞混头像/权限） |
+| 提交邮箱 | 与 GitHub 账号已验证邮箱一致（`git config --global user.email` 可查）；公开仓库建议用 `<id>+<username>@users.noreply.github.com` |
+| 显示名 | git 全局显示名与 GitHub 账号名可以不同；**归属看邮箱，不看 name** |
+| 另一个账号 | 本机还有一个 0 仓库的空账号，**不要用**（容易搞混头像/权限） |
 
 判断「用哪个账号」的最快方式：仓库要归谁就 `gh api user --jq .login`。
 
@@ -187,3 +187,41 @@ $GH api repos/<owner>/<repo> --jq .license.spdx_id
 - [ ] 每个仓库的可见性是否仍合适（尤其含个人数据的）
 - [ ] `gh api repos/<owner>/<repo> --jq .license.spdx_id` 是否都识别正确
 - [ ] 长期没动的仓库：归档而不是删除
+
+---
+
+## 11. 公开仓库的脱敏
+
+公开仓库 = 全世界可爬。写进文件的那一刻就已经外泄，删掉文件也不等于删掉历史。
+
+**绝不能出现**（已由 `scripts/check_privacy.py` 拦截）：
+
+| 类型 | 例子 | 替代写法 |
+|---|---|---|
+| 私人邮箱 | 个人域名邮箱 | `you@example.com` 或「与 GitHub 已验证邮箱一致」 |
+| 家目录真名 | `/Users/<真名>/...` | `~/...` 或 `<workspace>/...` |
+| 服务器 / 内网 IP | 公网或内网地址 | `<host>`、`<server-ip>`（配置文件里用占位符） |
+| 凭证文件 | 指向真实凭据的路径 | 「凭证文件（600 权限）」 |
+| 另一个账号名 | 备用/小号 | 「另一个空账号」 |
+
+**提交身份也是上传内容**：`git log` 会永久带上作者邮箱。公开仓库建议统一用
+`<id>+<username>@users.noreply.github.com`。已推送的历史要改写：
+
+```bash
+git bundle create /tmp/backup.bundle --all          # 先备份
+FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch -f --env-filter '
+export GIT_AUTHOR_NAME="<name>";  export GIT_AUTHOR_EMAIL="<id>+<user>@users.noreply.github.com"
+export GIT_COMMITTER_NAME="<name>"; export GIT_COMMITTER_EMAIL="<id>+<user>@users.noreply.github.com"
+' -- --all
+git push --force-with-lease origin main
+```
+
+**注意**：force push 只移动分支指针，旧对象在 GitHub 上仍可能通过 commit SHA 访问一段时间。
+要彻底清除得让 GitHub Support 清理，或删除仓库重建。所以——**别让它先进去**。
+
+自查：
+
+```bash
+make privacy                                   # 工作区 + 全历史
+python3 scripts/check_privacy.py . --include-vendored   # 连第三方一起扫
+```

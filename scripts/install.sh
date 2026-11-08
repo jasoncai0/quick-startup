@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # quick-startup 安装器：把仓库里的 skills / 记忆 / 规范 / MCP 配置装进 ~/.dsh
 #
-#   ./scripts/install.sh              # 安装 / 更新
+#   ./scripts/install.sh              # 安装 / 更新（含 skills）
+#   ./scripts/install.sh --no-skills  # 只更新记忆/规范/MCP，不动 skills（保留软链布局）
 #   ./scripts/install.sh --dry-run    # 只打印动作
 #   DSH_HOME=/tmp/x ./scripts/install.sh   # 装到别处（沙箱验证）
 #
@@ -13,11 +14,13 @@ DSH_HOME="${DSH_HOME:-$HOME/.dsh}"
 SKILLS_DST="$DSH_HOME/skills"
 BACKUP="$DSH_HOME/backups/quick-startup-$(date +%Y%m%d-%H%M%S)"
 DRY_RUN=0
+INSTALL_SKILLS=1
 
 for arg in "$@"; do
   case "$arg" in
     -n|--dry-run) DRY_RUN=1 ;;
-    -h|--help) sed -n '2,10p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    --no-skills) INSTALL_SKILLS=0 ;;
+    -h|--help) sed -n '2,11p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) echo "未知参数：${arg}（可用 --dry-run / --help）" >&2; exit 2 ;;
   esac
 done
@@ -45,6 +48,7 @@ fi
 printf '\nquick-startup → %s%s\n\n' "$DSH_HOME" "$([[ $DRY_RUN == 1 ]] && echo '  (dry-run)')"
 
 # ── 1. skills ────────────────────────────────────────────────────────────────
+if (( INSTALL_SKILLS )); then
 step "安装 skills"
 run mkdir -p "$SKILLS_DST"
 n=0
@@ -59,6 +63,10 @@ for dir in "$REPO"/skills/*/; do
   n=$((n + 1))
 done
 ok "$n 个 skill → $SKILLS_DST"
+else
+  step "安装 skills"
+  ok "跳过（--no-skills：保留本机现有布局，如软链安装）"
+fi
 
 # ── 2. 记忆：AGENTS.md（合并，不覆盖本机追加内容）───────────────────────────
 step "安装全局记忆 AGENTS.md"

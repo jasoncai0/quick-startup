@@ -3,6 +3,17 @@
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 `VERSION` 文件与本节最新版本号必须一致（由 `scripts/check_docs.py` 强制）。
 
+## [0.4.1] - 2026-11-09
+
+### 安全
+
+- **脱敏**：公开仓库里的私人邮箱与另一个空账号名全部替换为描述性表述；
+  历史中 8 个 commit 的作者/提交者身份改写为 GitHub noreply 地址并重建历史。
+- `scripts/check_privacy.py`：新增脱敏门禁——个人邮箱、家目录真名路径、IPv4、凭证文件名；
+  跳过 `skills/`（第三方），支持 `.privacy-denylist`（本机真名/内网域名，不入库）与 `--history`。
+- `verify.sh` 第 19 项接入脱敏检查；CI 的 secret-scan job 用 `--history` 扫全部提交。
+- `install.sh --no-skills`：只更新记忆/规范/MCP，不动 skills（保留软链布局）。
+
 ## [0.4.0] - 2026-11-09
 
 ### Added

@@ -108,6 +108,7 @@ macOS runner（bash 3.2 + C locale）会把紧跟变量的全角标点吞进变�
 
 1. **密钥扫描**：`grep` 规则 + CI gitleaks（全历史）。本地先扫一遍，别等 CI。
 2. **本地测试/构建通过**：不要用「CI 会跑」当借口省掉本地验证。
+   注意 `py_compile` 只能查语法，查不出未使用的 import——本地跑 `make lint`（含 ruff）。
 3. **`git status` 干净**：没有 `.DS_Store`、`__pycache__`、临时脚本、备份目录。
 4. **看 diff 规模**：一次 push 混进 3 件不相关的事，事后很难 revert。
 5. 推完**必须看 CI 结论**，红了当场修，不留过夜红。

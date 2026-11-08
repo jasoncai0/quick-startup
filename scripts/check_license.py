@@ -20,7 +20,6 @@ import argparse
 import os
 import re
 import subprocess
-import sys
 from pathlib import Path
 
 # MIT 标准正文的非空行（不含版权行）

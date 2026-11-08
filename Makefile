@@ -34,11 +34,13 @@ license: ## 校验 LICENSE 与上游许可快照
 doctor: ## 环境体检（只读）：安装完整性、断链、MCP、工具链
 	./scripts/doctor.sh
 
-lint: ## shellcheck + python 语法
+lint: ## shellcheck + ruff + python 语法
 	@command -v shellcheck >/dev/null 2>&1 \
 	  && shellcheck -x scripts/*.sh tests/run.sh \
 	  || echo "（未安装 shellcheck，跳过；CI 会跑）"
 	@python3 -m py_compile scripts/*.py && echo "python 语法 OK"
+	@ruff check --select E9,F scripts/ 2>/dev/null \
+	  || echo "（未安装 ruff，跳过静态检查；CI 会跑）"
 
 secret: ## 只跑密钥扫描
 	@grep -rIiE -f scripts/secret-patterns.txt . \

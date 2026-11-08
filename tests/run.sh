@@ -49,6 +49,7 @@ T "install.sh 成功" "$REPO/scripts/install.sh"
 T "安装 42 个 skill" test "$(find "$DSH_HOME/skills" -maxdepth 1 -mindepth 1 -type d | wc -l | tr -d ' ')" -eq 42
 T "写入 AGENTS.md 且与仓库一致" cmp -s "$REPO/AGENTS.md" "$DSH_HOME/AGENTS.md"
 T "写入 backend-standards.md 且与仓库一致" cmp -s "$REPO/standards/backend-standards.md" "$DSH_HOME/backend-standards.md"
+T "写入 GitHub 记忆 github-usage.md" cmp -s "$REPO/memory/github.md" "$DSH_HOME/github-usage.md"
 T "注入 mcp-codegraph 并使用 CODEGRAPH_BIN" grep -q "$CODEGRAPH_BIN" "$DSH_HOME/cordis.patch.yml"
 T "注入内容含 serverName" grep -q 'serverName: codegraph' "$DSH_HOME/cordis.patch.yml"
 T "首次安装不产生备份目录" test ! -d "$DSH_HOME/backups"
@@ -64,10 +65,15 @@ T "--dry-run 不改动任何文件" test "$before" = "$after"
 
 head2 "3. 覆盖前备份"
 printf '\n<!-- test marker -->\n' >> "$DSH_HOME/AGENTS.md"
+printf '\n<!-- gh marker -->\n' >> "$DSH_HOME/github-usage.md"
 T "覆盖前备份：install 成功" "$REPO/scripts/install.sh"
 T "生成备份目录" test -d "$DSH_HOME/backups"
 T "备份保留被覆盖内容" grep -rq 'test marker' "$DSH_HOME/backups"
 T "AGENTS.md 恢复为仓库版" cmp -s "$REPO/AGENTS.md" "$DSH_HOME/AGENTS.md"
+T "GitHub 记忆也备份并恢复" cmp -s "$REPO/memory/github.md" "$DSH_HOME/github-usage.md"
+T "备份保留 GitHub 记忆改动" grep -rq 'gh marker' "$DSH_HOME/backups"
+
+T "GitHub 记忆含账号与 LICENSE 坑" bash -c "grep -q 'jasoncai0' '$DSH_HOME/github-usage.md' && grep -q 'NOASSERTION' '$DSH_HOME/github-usage.md'"
 
 head2 "4. verify.sh 全绿"
 T "verify --require-install 成功" "$REPO/scripts/verify.sh" --require-install

@@ -5,8 +5,9 @@
 ## 当前状态
 
 - **0.2.0**（2026-11-09）：完成测试、CI、锁文件、文档防漂移、许可证合规基线。
+- **0.3.0**（2026-11-09）：GitHub 使用记忆入库并接入安装/校验（`memory/github.md`）。
 
-## 0.3.0 — 升级与合规
+## 0.4.0 — 升级与合规
 
 - [ ] `scripts/upgrade-skill.sh <name>`：按 `skills/SOURCES.md` 里 pin 的 commit 重新拉取单个 skill，
       自动 `git diff --stat` 预览 + `make export`，避免手工 `cp -R` 出错。
@@ -16,13 +17,13 @@
       让合规不再依赖「上游根目录还在」。
 - [ ] `skills/manifest.tsv` 增加 `upstream`、`commit` 两列，让 SOURCES.md 的表格与锁文件同源。
 
-## 0.3.x — 环境体检
+## 0.4.x — 环境体检
 
 - [ ] `scripts/doctor.sh`：一次性体检 —— DSH 版本、`~/.dsh` 布局、codegraph 版本与遥测状态、
       Python Playwright/Chromium、软链是否断、`cordis.patch.yml` 是否被别的 patch 覆盖。
 - [ ] `doctor.sh --json` 输出机器可读结果，便于以后接进 DSH 的会话启动检查。
 
-## 0.4.0 — 跨平台
+## 0.5.0 — 跨平台
 
 - [ ] Linux 支持：`install.sh` 在无 Homebrew 的机器上自动探测 `codegraph` 路径；
       CI 增加 `ubuntu-latest` 下的「完整安装 + verify」用例（当前只在临时目录跑）。
@@ -31,6 +32,8 @@
 ## 持续项（每次迭代都做）
 
 - [ ] 每季度复核：上游 commit、许可证变更、DSH 是否改了 skill 目录约定。
+- [ ] **GitHub 使用记忆**：每踩到一个新坑（如 `NOASSERTION`），就更新 `memory/github.md`，
+      并在 `verify.sh` 或 `check_docs.py` 里加对应检查，避免同一坑踩第二次。
 - [ ] 每新增一个 skill：更新 `GROUPS`、README 表格、`SOURCES.md`、`THIRD-PARTY-NOTICES.md`，
       然后 `make manifest && make all`（少一项都会被 CI 拦下）。
 - [ ] 每次改 `AGENTS.md`：只改仓库版，再 `make install`；不要直接改 `~/.dsh/AGENTS.md`。

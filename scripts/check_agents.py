@@ -62,7 +62,7 @@ def main() -> int:
     got_rules = set(rules(inst_text))
     missing = [r for r in want_rules if r not in got_rules]
     if missing:
-        problems.append(f"已安装版缺少 {len(missing)} 条红线：")
+        problems.append(f"已安装版缺少 {len(missing)} 条编号约定：")
         for line in missing[:5]:
             problems.append(f"    {line[:60]}…")
 
@@ -75,7 +75,7 @@ def main() -> int:
         return 1
 
     extra = len([l for l in inst_text.splitlines() if l.strip()]) - len([l for l in repo_text.splitlines() if l.strip()])
-    print(f"  记忆块与 {len(want_rules)} 条红线完整；本机额外 {max(extra, 0)} 行")
+    print(f"  记忆块与 {len(want_rules)} 条编号约定完整；本机额外 {max(extra, 0)} 行")
     return 0
 
 

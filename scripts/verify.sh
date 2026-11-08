@@ -79,8 +79,9 @@ else
   for d in "$SKILLS_DST"/*/; do [ -d "$d" ] && inst_skills=$((inst_skills + 1)); done
   check "已安装 skill 数与仓库一致（$inst_skills / ${repo_skills}）" [ "$inst_skills" -eq "$repo_skills" ]
   check_out "每个 skill 与锁文件逐字节一致" python3 "$REPO/scripts/check_manifest.py" --repo "$REPO" --installed "$SKILLS_DST"
-  check_out "已安装 AGENTS.md 包含仓库全部内容" python3 "$REPO/scripts/check_agents.py" "$REPO/AGENTS.md" "$DSH_HOME/AGENTS.md"
+  check_out "记忆块与编号约定与仓库一致" python3 "$REPO/scripts/check_agents.py" "$REPO/AGENTS.md" "$DSH_HOME/AGENTS.md"
   check "已安装规范与仓库一致" cmp -s "$REPO/standards/backend-standards.md" "$DSH_HOME/backend-standards.md"
+  check "已安装 GitHub 记忆与仓库一致" cmp -s "$REPO/memory/github.md" "$DSH_HOME/github-usage.md"
   check "cordis.patch.yml 已注入 mcp-codegraph" grep -q 'mcp-codegraph' "$DSH_HOME/cordis.patch.yml"
 fi
 

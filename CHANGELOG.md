@@ -3,6 +3,19 @@
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 `VERSION` 文件与本节最新版本号必须一致（由 `scripts/check_docs.py` 强制）。
 
+## [0.3.0] - 2026-11-09
+
+### Added
+
+- `memory/github.md` + `~/.dsh/github-usage.md`：GitHub 使用记忆（账号归属、单分支/不开 PR、
+  提交格式、推送凭据、CI 约定、许可证坑、季度复核清单），常驻摘要进 `AGENTS.md` 第 8 条。
+- `install.sh` 安装该记忆并备份旧版；`verify.sh` 比对一致性；`tests/run.sh` 增至 37 项。
+
+### Fixed
+
+- `LICENSE` 混入了中文说明，导致 GitHub 把仓库识别成 `NOASSERTION`；改为纯 MIT 原文，
+  范围说明移到 `THIRD-PARTY-NOTICES.md` 与 README。
+
 ## [0.2.0] - 2026-11-09
 
 ### Added

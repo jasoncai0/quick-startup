@@ -5,7 +5,7 @@
 
 - 逐 skill 的来源与固定 commit：见 [`skills/SOURCES.md`](skills/SOURCES.md)
 - 机器可读清单（含内容摘要）：见 [`skills/manifest.tsv`](skills/manifest.tsv)
-- 本仓库原创部分（脚本、文档、规范）的许可见 [`LICENSE`](LICENSE)
+- 本仓库原创部分（脚本、测试、文档、规范、记忆）以 MIT 发布，原文在 [`LICENSE`](LICENSE)
 
 ## 汇总
 

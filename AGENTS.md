@@ -1,5 +1,5 @@
 <!-- 由 quick-startup 维护：https://github.com/jasoncai0/quick-startup
-     本机追加的笔记可以写在文件末尾；verify 只校验 CodeGraph 块、10 条红线与规范指针。 -->
+     本机追加的笔记可以写在文件末尾；verify 只校验 CodeGraph 块、各条编号约定与规范指针。 -->
 
 <!-- CODEGRAPH_START -->
 ## CodeGraph
@@ -28,3 +28,16 @@ If there is no `.codegraph/` directory, skip CodeGraph entirely — indexing is 
 10. **迁移与测试**：expand-contract、online DDL、可回滚；集成测试用真实 DB 并断言 SQL 条数。
 
 偏离以上红线需在 PR 写明：违反哪条、原因、`EXPLAIN`/压测证据、回滚方案。
+
+## GitHub（jasoncai0）
+
+完整版：`~/.dsh/github-usage.md`。建仓、提交、推送、发布、改 CI 前先读完整版；下面是常驻约定。
+
+1. **账号**：个人仓库一律归 `jasoncai0`（邮箱 `you@example.com`，归属看邮箱不看 name）；`another-account` 是 0 仓库的空号，别用。
+2. **分支与 PR**：只有 `main`；个人仓库不开 PR，直接 commit → push → 看 CI 结论，红了当场修。
+3. **推送**：HTTPS + `GH_CONFIG_DIR=<workspace>/.tools/ghconfig` 的 gh 凭据；token 绝不写进 remote URL 或脚本。
+4. **提交**：`type: 一句话` + `-` 列改动；修 bug 必须写清「哪个门禁抓到的、怎么验证」。
+5. **推送前**：密钥扫描、本地测试通过、`git status` 干净；不 force push `main`、不重写已推送历史。
+6. **LICENSE**：只放 MIT 原文，**不加任何说明**——加了会被 GitHub 识别成 `NOASSERTION`，说明放 `THIRD-PARTY-NOTICES.md`。
+7. **发布**：只有面向用户的产品打 tag/release；工具、服务类仓库不打。
+8. **不碰别人的仓**：不直接 push 非本人仓库，走 fork + PR。

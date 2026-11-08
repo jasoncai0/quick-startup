@@ -33,6 +33,7 @@ run() { if (( DRY_RUN )); then printf '    [dry-run] %s\n' "$*"; else "$@"; fi; 
 [ -f "$REPO/AGENTS.md" ] || die "仓库不完整：缺 $REPO/AGENTS.md"
 [ -d "$REPO/skills" ]    || die "仓库不完整：缺 $REPO/skills"
 [ -f "$REPO/skills/manifest.tsv" ] || die "仓库不完整：缺锁文件 skills/manifest.tsv"
+[ -f "$REPO/memory/github.md" ] || die "仓库不完整：缺 memory/github.md"
 
 if [ -d "$DSH_HOME" ] && [ ! -w "$DSH_HOME" ]; then
   die "$DSH_HOME 不可写（检查权限，或设置 DSH_HOME 指向别处）"
@@ -84,6 +85,19 @@ else
   fi
   run cp "$REPO/standards/backend-standards.md" "$DSH_HOME/backend-standards.md"
   ok "写入 $DSH_HOME/backend-standards.md"
+fi
+
+# ── 3b. 记忆：GitHub 使用规范 ────────────────────────────────────────────────
+step "安装 GitHub 使用记忆"
+if cmp -s "$REPO/memory/github.md" "$DSH_HOME/github-usage.md" 2>/dev/null; then
+  ok "已是最新，跳过"
+else
+  if [ -f "$DSH_HOME/github-usage.md" ]; then
+    run mkdir -p "$BACKUP"
+    run cp "$DSH_HOME/github-usage.md" "$BACKUP/github-usage.md"
+  fi
+  run cp "$REPO/memory/github.md" "$DSH_HOME/github-usage.md"
+  ok "写入 $DSH_HOME/github-usage.md"
 fi
 
 # ── 4. MCP：CodeGraph ────────────────────────────────────────────────────────

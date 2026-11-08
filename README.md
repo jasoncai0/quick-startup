@@ -20,7 +20,7 @@ cd ~/quick-startup && make install && make verify
 
 | 层 | 仓库位置 | 安装到 | 解决什么问题 |
 |---|---|---|---|
-| **记忆** | [`AGENTS.md`](AGENTS.md)、`memory/` | `~/.dsh/AGENTS.md` | 每次会话都要重复交代的背景：CodeGraph 用法、后端红线 |
+| **记忆** | [`AGENTS.md`](AGENTS.md)、[`memory/`](memory/github.md) | `~/.dsh/AGENTS.md`、`~/.dsh/github-usage.md` | 每次会话都要重复交代的背景：CodeGraph 用法、后端红线、GitHub 惯例 |
 | **规范** | [`standards/backend-standards.md`](standards/backend-standards.md) | `~/.dsh/backend-standards.md` | 213 行、11 节的 Java/Go 后端强制规范（N+1、Join、JSON、事务、迁移…） |
 | **技能** | `skills/`（42 个） | `~/.dsh/skills/` | 可复用的任务方法论：从 TDD、系统化调试到 Web 质量审计、架构图 |
 | **接线** | [`mcp/`](mcp/codegraph.cordis.patch.yml) | `~/.dsh/cordis.patch.yml` | CodeGraph MCP server，让 agent 一次调用拿到符号源码 + 调用链 |
@@ -39,6 +39,7 @@ quick-startup/
 │   └── backend-standards.md       # 后端规范全文（213 行）
 ├── memory/
 │   ├── codegraph.md               # CodeGraph 记忆块 + 安装事实 + 维护命令
+│   ├── github.md                  # GitHub 使用规范（账号/分支/提交/推送/发布/坑）
 │   └── preferences.md             # DSH 模型/展示偏好（手工对齐，不自动覆盖）
 ├── mcp/
 │   └── codegraph.cordis.patch.yml # CodeGraph MCP 的 Cordis patch 参考配置
@@ -56,7 +57,7 @@ quick-startup/
 │   ├── check_docs.py              # README/VERSION/CHANGELOG 防漂移
 │   ├── check_agents.py            # 记忆块与红线语义校验
 │   └── secret-patterns.txt        # 密钥扫描规则
-├── tests/run.sh                   # 33 项集成测试（临时 DSH_HOME，不碰真实环境）
+├── tests/run.sh                   # 37 项集成测试（临时 DSH_HOME，不碰真实环境）
 ├── .githooks/pre-commit           # 可选本地门禁
 └── .github/workflows/ci.yml       # ubuntu + macos 双平台
 ```
@@ -67,8 +68,8 @@ quick-startup/
 
 | 门禁 | 命令 | 覆盖什么 |
 |---|---|---|
-| 集成测试 | `make test` | **33 项**：首次安装、幂等、dry-run、覆盖前备份、漂移检测、密钥扫描、反向导出、未知参数、含空格路径 |
-| 三层校验 | `make verify` | **16 项**：① 仓库完整性 ② 本机安装一致性 ③ 密钥扫描 |
+| 集成测试 | `make test` | **37 项**：首次安装、幂等、dry-run、覆盖前备份、漂移检测、密钥扫描、反向导出、未知参数、含空格路径 |
+| 三层校验 | `make verify` | **17 项**：① 仓库完整性 ② 本机安装一致性 ③ 密钥扫描 |
 | 锁文件 | `python3 scripts/check_manifest.py --repo .` | 每个 skill 的内容指纹（`digest`）与锁文件一致；未登记/已失效/未分组都报错 |
 | 文档防漂移 | `python3 scripts/check_docs.py .` | README 的 skill 数量、42 个名字、规范行数、相对链接、`VERSION` 与 `CHANGELOG` 必须与仓库现实一致 |
 | 静态检查 | `make lint` | shellcheck（0 告警）+ Python 语法 |
@@ -123,6 +124,8 @@ DSH_HOME=/tmp/test ./scripts/install.sh  # 装到别处（沙箱试跑）
 
 - CodeGraph 行为约定（有 `.codegraph/` 就先查图，没有就跳过，不擅自建索引）
 - 后端 10 条常驻红线（全文 213 行放 `backend-standards.md`，按需读）
+- GitHub 8 条常驻约定（账号、单分支、直接推 main、提交格式、LICENSE 只放原文…），
+  全文放 `github-usage.md`，建仓/推送/发布前读
 
 规范按「必须/应当 + 偏离流程」写，不是口号：每条 MUST 都有可验证形式
 （例如 N+1 → 「1 行与 N 行数据断言 SQL 条数相同」），CR 清单可直接勾。
@@ -160,6 +163,7 @@ git add -A && git commit && git push
 - `understand*` 与 `diagram-design` 的 `/command` 提示词（`$ARGUMENTS` 等）是 Claude Code 约定，DSH 不做参数替换。
 - CodeGraph 的 `command` 是 macOS/Homebrew 绝对路径；Linux 需改 `mcp/` 配置（`install.sh` 会优先取 `command -v codegraph`）。
 - `verify.sh` 检查本机安装时假定 `~/.dsh` 是可写目录；只读环境请用 `DSH_HOME` 指向临时目录。
+- `github-usage.md` 里的 gh 路径绑定本机 `<workspace>/.tools/` 布局；换机器需要改这两个路径。
 - shell 脚本里变量后紧跟全角标点必须写 `${var}`：CI 在 C locale 下跑，`$var（` 会被解析成
   变量名的一部分（本仓库已加检查，`verify.sh` 第 10 项）。
 

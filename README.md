@@ -44,7 +44,8 @@ quick-startup/
 ├── mcp/
 │   └── codegraph.cordis.patch.yml # CodeGraph MCP 的 Cordis patch 参考配置
 ├── skills/
-│   ├── SOURCES.md                 # 上游仓库 + 固定 commit + 本地改动说明
+│   ├── SOURCES.md                 # 上游仓库 + 固定 commit + 本地改动说明（人读）
+│   ├── upstreams.json             # 同一份来源的机器可读版（被 check_upstream 校验）
 │   ├── manifest.tsv               # 锁文件：name/files/size_kb/digest/group
 │   └── <skill-name>/SKILL.md …
 ├── licenses/                      # 9 个上游的许可快照（合规不依赖上游还活着）
@@ -63,7 +64,7 @@ quick-startup/
 │   ├── doctor.sh                  # 环境体检（只读，可 --json）
 │   ├── purge_history.sh           # 删库重建以清除悬空的历史 commit（默认只体检）
 │   └── secret-patterns.txt        # 密钥扫描规则
-├── tests/run.sh                   # 55 项集成测试（临时 DSH_HOME，不碰真实环境）
+├── tests/run.sh                   # 61 项集成测试（临时 DSH_HOME，不碰真实环境）
 ├── .githooks/pre-commit           # 可选本地门禁
 └── .github/workflows/ci.yml       # ubuntu + macos 双平台
 ```
@@ -74,11 +75,12 @@ quick-startup/
 
 | 门禁 | 命令 | 覆盖什么 |
 |---|---|---|
-| 集成测试 | `make test` | **55 项**：首次安装、幂等、dry-run、覆盖前备份、漂移检测、密钥扫描、反向导出、记忆合并、环境体检、许可证守卫、含空格路径 |
-| 三层校验 | `make verify` | **19 项**：① 仓库完整性 ② 本机安装一致性 ③ 密钥扫描 |
+| 集成测试 | `make test` | **61 项**：首次安装、幂等、dry-run、覆盖前备份、漂移检测、密钥扫描、反向导出、记忆合并、环境体检、许可证守卫、含空格路径 |
+| 三层校验 | `make verify` | **20 项**：① 仓库完整性 ② 本机安装一致性 ③ 密钥扫描 |
 | 环境体检 | `make doctor` | 安装完整性、断链、MCP 可执行路径、codegraph/gh/python 版本；只读，`--json` 可供脚本消费 |
 | 许可证守卫 | `make license` | LICENSE 必须**逐行等于 MIT 原文**（防 NOASSERTION）+ 9 个上游许可快照齐全 |
 | 脱敏检查 | `make privacy` | 公开仓库不得出现个人邮箱、家目录真名路径、IP、凭证文件名；`--history` 连全部提交一起扫 |
+| 上游来源 | `make upstream` | 42 个 skill 每个恰好归属一个上游；pin 的 commit 仍存在；上游许可变更即失败 |
 | 锁文件 | `python3 scripts/check_manifest.py --repo .` | 每个 skill 的内容指纹（`digest`）与锁文件一致；未登记/已失效/未分组都报错 |
 | 文档防漂移 | `python3 scripts/check_docs.py .` | README 的 skill 数量、42 个名字、规范行数、相对链接、`VERSION` 与 `CHANGELOG` 必须与仓库现实一致 |
 | 静态检查 | `make lint` | shellcheck（0 告警）+ Python 语法 |

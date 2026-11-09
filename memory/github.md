@@ -182,6 +182,7 @@ $GH api repos/<owner>/<repo> --jq .license.spdx_id
 季度复核清单：
 
 - [ ] `make doctor` 全绿（安装完整性、断链、MCP 路径）
+- [ ] `make upstream` 复核：pin 的 commit 还在不在、上游新增多少、许可证有没有变
 - [ ] `gh --version` 是否有新版（二进制在 `.tools/`，替换即可）
 - [ ] token scope 是否仍是最小集（`repo, read:org, gist`）
 - [ ] 每个仓库的可见性是否仍合适（尤其含个人数据的）

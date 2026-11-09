@@ -108,6 +108,10 @@ printf '\n联系邮箱：someone@%s\n' "gmail.com" >> "$SCAN/README.md"
 T_fail "README 出现个人邮箱后 verify 失败" env DSH_HOME="$DSH_HOME" "$SCAN/scripts/verify.sh"
 T "失败原因指向个人邮箱" bash -c "DSH_HOME='$DSH_HOME' '$SCAN/scripts/verify.sh' 2>&1 | grep -q '个人邮箱'"
 cp "$REPO/README.md" "$SCAN/README.md"
+mkdir -p "$SCAN/skills/zz-undeclared" && printf -- '---\nname: zz\n' > "$SCAN/skills/zz-undeclared/SKILL.md"
+T_fail "有未声明来源的 skill 时 verify 失败" env DSH_HOME="$DSH_HOME" "$SCAN/scripts/verify.sh"
+T "失败原因指向未声明来源" bash -c "DSH_HOME='$DSH_HOME' '$SCAN/scripts/verify.sh' 2>&1 | grep -q '上游'"
+rm -rf "$SCAN/skills/zz-undeclared"
 
 head2 "7. 反向导出"
 cp -R "$REPO" "$WORK/export-repo"
@@ -129,6 +133,7 @@ T "doctor --json 可解析且 fail=0" python3 -c "import json,sys; d=json.load(o
 head2 "9. 许可证守卫"
 T "仓库 LICENSE 通过" python3 "$REPO/scripts/check_license.py" "$REPO"
 T "上游许可快照齐全" test -f "$REPO/licenses/README.md"
+T "上游来源声明结构一致" python3 "$REPO/scripts/check_upstream.py" "$REPO"
 
 head2 "10. 参数与边界"
 T_code "install.sh 未知参数返回 2" 2 "$REPO/scripts/install.sh" --bogus

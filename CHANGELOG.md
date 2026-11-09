@@ -3,6 +3,21 @@
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 `VERSION` 文件与本节最新版本号必须一致（由 `scripts/check_docs.py` 强制）。
 
+## [0.6.0] - 2026-11-09
+
+### Added
+
+- `skills/upstreams.json`：9 个上游 / 42 个 skill 的机器可读来源表（repo、pin 的 commit、
+  许可证、快照文件名、覆盖的 skill 列表），与 `SOURCES.md` 互为human/机器版本。
+- `scripts/check_upstream.py`：离线校验覆盖度与许可声明；`--online` 复核 pin 是否仍存在、
+  上游新增多少 commit、许可证是否变更（变更即失败）。
+- `make upstream`：季度复核入口。verify 新增第 20 项（离线结构校验）。
+
+### Fixed
+
+- 在线检查最初把「gh 未认证」误报成「上游 commit 不存在」——典型的假阴性。
+  现在先查 `gh auth status`，未认证时明确跳过，并自动发现同级的 `.tools/ghconfig`。
+
 ## [0.5.0] - 2026-11-09
 
 ### Added

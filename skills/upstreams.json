@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "note": "42 个 skill 的上游来源与固定 commit。check_upstream.py --offline 校验结构，--online 复核上游是否有更新或许可变更。",
+  "upstreams": [
+    {
+      "repo": "obra/superpowers",
+      "commit": "22f0b46",
+      "license": "MIT",
+      "license_snapshot": "obra-superpowers.txt",
+      "skills": [
+        "brainstorming", "writing-plans", "executing-plans", "test-driven-development",
+        "systematic-debugging", "verification-before-completion", "requesting-code-review",
+        "receiving-code-review", "using-git-worktrees", "finishing-a-development-branch",
+        "subagent-driven-development", "dispatching-parallel-agents", "writing-skills"
+      ]
+    },
+    {
+      "repo": "anthropics/skills",
+      "commit": "2c5958e",
+      "license": "Apache-2.0",
+      "license_snapshot": "anthropics-skills.Apache-2.0.txt",
+      "skills": [
+        "frontend-design", "webapp-testing", "mcp-builder", "skill-creator", "claude-api", "doc-coauthoring"
+      ]
+    },
+    {
+      "repo": "vercel-labs/agent-skills",
+      "commit": "1a2c79d",
+      "license": "MIT",
+      "license_snapshot": "vercel-labs-agent-skills.NOTE.md",
+      "skills": [
+        "vercel-react-best-practices", "vercel-composition-patterns",
+        "vercel-react-view-transitions", "web-design-guidelines"
+      ]
+    },
+    {
+      "repo": "addyosmani/web-quality-skills",
+      "commit": "afa8da9",
+      "license": "MIT",
+      "license_snapshot": "addyosmani-web-quality-skills.txt",
+      "skills": ["accessibility", "best-practices", "core-web-vitals", "performance", "seo", "web-quality-audit"]
+    },
+    {
+      "repo": "OthmanAdi/planning-with-files",
+      "commit": "2362ca3",
+      "license": "MIT",
+      "license_snapshot": "OthmanAdi-planning-with-files.txt",
+      "skills": ["planning-with-files"]
+    },
+    {
+      "repo": "ayghri/i-have-adhd",
+      "commit": "1ecea19",
+      "license": "MIT",
+      "license_snapshot": "ayghri-i-have-adhd.txt",
+      "skills": ["i-have-adhd"]
+    },
+    {
+      "repo": "multica-ai/andrej-karpathy-skills",
+      "commit": "2c60614",
+      "license": "MIT",
+      "license_snapshot": "multica-ai-karpathy-skills.NOTE.md",
+      "skills": ["karpathy-guidelines"]
+    },
+    {
+      "repo": "Egonex-AI/Understand-Anything",
+      "commit": "a6ea402",
+      "license": "MIT",
+      "license_snapshot": "Egonex-AI-Understand-Anything.txt",
+      "skills": [
+        "understand", "understand-chat", "understand-dashboard", "understand-diff",
+        "understand-domain", "understand-explain", "understand-figma",
+        "understand-knowledge", "understand-onboard"
+      ]
+    },
+    {
+      "repo": "cathrynlavery/diagram-design",
+      "commit": "e57eda6",
+      "license": "MIT",
+      "license_snapshot": "cathrynlavery-diagram-design.txt",
+      "skills": ["diagram-design"]
+    }
+  ]
+}

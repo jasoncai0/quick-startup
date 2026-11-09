@@ -61,6 +61,7 @@ quick-startup/
 │   ├── check_privacy.py           # 脱敏：邮箱/家目录/IP/凭证文件名，支持 --history
 │   ├── merge_agents.py            # 合并 AGENTS.md，保留本机追加内容
 │   ├── doctor.sh                  # 环境体检（只读，可 --json）
+│   ├── purge_history.sh           # 删库重建以清除悬空的历史 commit（默认只体检）
 │   └── secret-patterns.txt        # 密钥扫描规则
 ├── tests/run.sh                   # 55 项集成测试（临时 DSH_HOME，不碰真实环境）
 ├── .githooks/pre-commit           # 可选本地门禁

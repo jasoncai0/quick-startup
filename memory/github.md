@@ -225,8 +225,19 @@ export GIT_COMMITTER_NAME="<name>"; export GIT_COMMITTER_EMAIL="<id>+<user>@user
 git push --force-with-lease origin main
 ```
 
-**注意**：force push 只移动分支指针，旧对象在 GitHub 上仍可能通过 commit SHA 访问一段时间。
-要彻底清除得让 GitHub Support 清理，或删除仓库重建。所以——**别让它先进去**。
+**注意**：force push 只移动分支指针，旧对象在 GitHub 上仍可通过 commit SHA 访问
+（实测：重写后 `gh api repos/O/R/commits/<旧SHA>` 仍返回 200）。要彻底清除只有两条路：
+删除重建，或让 GitHub Support 清理。所以——**别让它先进去**。
+
+本仓库自带的工具（默认只体检，不删东西）：
+
+```bash
+./scripts/purge_history.sh --check --sha <旧SHA>    # 列出仍可访问的旧 commit
+./scripts/purge_history.sh --yes-i-mean-it          # 删库 → 重建 → 推送 → 复核
+```
+
+前置：`gh auth refresh -h github.com -s delete_repo`（默认 OAuth token **没有** delete_repo scope，
+`gh repo delete` 会直接失败）。
 
 自查：
 

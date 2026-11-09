@@ -3,6 +3,22 @@
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 `VERSION` 文件与本节最新版本号必须一致（由 `scripts/check_docs.py` 强制）。
 
+## [0.5.0] - 2026-11-09
+
+### Added
+
+- `scripts/purge_history.sh`：清除悬空历史。`--check` 只列出「仍可按 SHA 访问」的旧 commit，
+  `--yes-i-mean-it` 才执行「删除仓库 → 重建同名仓库 → 恢复描述/topics → 推送 → 复核」。
+  执行前自动打 bundle 备份，工作区不干净直接拒绝。
+- `make purge-check`：只读体检入口。
+
+### 记录
+
+- 真实坑：`git push --force` 后旧 commit **仍可通过 SHA 访问**（实测两个 SHA 返回 200）；
+  彻底清除必须删库重建或 GitHub Support 清理。
+- 第二个坑：默认 OAuth token 没有 `delete_repo` scope，`gh repo delete` 需要先
+  `gh auth refresh -h github.com -s delete_repo`。
+
 ## [0.4.1] - 2026-11-09
 
 ### 安全

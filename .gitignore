@@ -24,3 +24,4 @@ backups/
 
 # 本机脱敏 denylist（真名/内网域名等，不入库但参与扫描）
 .privacy-denylist
+.purge-targets

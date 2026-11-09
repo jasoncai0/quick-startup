@@ -137,6 +137,10 @@ T_code "verify.sh 未知参数返回 2" 2 "$REPO/scripts/verify.sh" --bogus
 T "verify.sh --help 返回 0" "$REPO/scripts/verify.sh" --help
 T "DSH_HOME 含空格可安装" env DSH_HOME="$WORK/with space/dsh" "$REPO/scripts/install.sh"
 T "含空格的安装目录 verify 成功" env DSH_HOME="$WORK/with space/dsh" "$REPO/scripts/verify.sh" --require-install
+T "purge_history --help 返回 0" "$REPO/scripts/purge_history.sh" --help
+T_code "purge_history 未知参数返回 2" 2 "$REPO/scripts/purge_history.sh" --bogus
+syntax_ok() { for f in "$REPO"/scripts/*.sh "$REPO"/tests/run.sh; do bash -n "$f" || return 1; done; }
+T "所有脚本语法正确" syntax_ok
 
 head2 "11. AGENTS.md 合并（不吞本机追加）"
 printf '\n## 本机笔记\n\n只属于这台机器的一行。\n' >> "$DSH_HOME/AGENTS.md"

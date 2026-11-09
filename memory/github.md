@@ -155,6 +155,10 @@ $GH run view <run-id> --log-failed
 # 本机环境体检（只读；不对劲先跑它）
 make doctor
 
+# 升级单个 skill：先看 diff，确认再加 --apply
+make upgrade SKILL=seo
+make upgrade SKILL=seo ARGS=--apply
+
 # 发布
 $GH release create v1.0.0 --title "v1.0.0" --notes-file CHANGELOG.md
 

@@ -1,7 +1,7 @@
 # quick-startup —— 日常入口
 # 依赖：bash 3.2+、python3（脚本里没有别的东西）
 .DEFAULT_GOAL := help
-.PHONY: help all install verify test export manifest docs license privacy upstream doctor purge-check lint secret clean
+.PHONY: help all install verify test export manifest docs license privacy upstream upgrade doctor purge-check lint secret clean
 
 help: ## 显示可用目标
 	@awk 'BEGIN {FS = ":.*## "; printf "\n用法：make <目标>\n\n"} \
@@ -36,6 +36,9 @@ privacy: ## 脱敏检查（工作区 + 全部历史）
 
 upstream: ## 复核上游 HEAD 与许可证（需 gh 认证）
 	python3 scripts/check_upstream.py . --online
+
+upgrade: ## 升级单个 skill：make upgrade SKILL=<name> [ARGS=--apply]
+	./scripts/upgrade_skill.sh $(SKILL) $(ARGS)
 
 doctor: ## 环境体检（只读）：安装完整性、断链、MCP、工具链
 	./scripts/doctor.sh

@@ -3,6 +3,22 @@
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 `VERSION` 文件与本节最新版本号必须一致（由 `scripts/check_docs.py` 强制）。
 
+## [0.7.0] - 2026-11-09
+
+### Added
+
+- `scripts/upgrade_skill.sh`：按上游 HEAD 升级单个 skill。默认只预览（列出变化文件 + diff 前 60 行），
+  `--apply` 才写入，并自动回写 `upstreams.json` 的 pin、重算 `manifest.tsv`。
+  `--source` 可指向本地目录/其它 git URL，因此测试完全离线。
+- `upstreams.json` 增加 `path_template` / `path_overrides`：解决「本地 skill 名 ≠ 上游目录名」
+  （如 `vercel-react-best-practices` → `skills/react-best-practices`）。
+- `make upgrade SKILL=<name>` 入口；记忆里补上用法。
+
+### Fixed
+
+- 升级器先克隆再检查工作区，导致脏树白跑一次网络；改为 `--apply` 在克隆前快速失败。
+- 测试断言原本 grep diff 的新增行，但整文件替换时新增行在 60 行预览之外；改断言 hunk 头 `@@`。
+
 ## [0.6.0] - 2026-11-09
 
 ### Added

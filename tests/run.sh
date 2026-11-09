@@ -156,5 +156,26 @@ T "标记段只出现一次" test "$(grep -c '本机追加（安装器保留）'
 T "再次重装不叠加" "$REPO/scripts/install.sh"
 T "仍只有一处标记段" test "$(grep -c '本机追加（安装器保留）' "$DSH_HOME/AGENTS.md")" -eq 1
 
+head2 "12. 单 skill 升级（离线 fake upstream）"
+FAKE="$WORK/fake-upstream"
+mkdir -p "$FAKE/skills/seo"
+printf -- '---\nname: seo\ndescription: fake upstream edition\n---\n\n# upstream version\n' > "$FAKE/skills/seo/SKILL.md"
+git -C "$FAKE" init -q -b main
+git -C "$FAKE" add -A
+git -C "$FAKE" -c user.email=t@example.com -c user.name=t commit -qm init
+UPR="$WORK/upgrade-repo"
+cp -R "$REPO" "$UPR"
+# 副本要先落成一个干净状态，否则升级器会正确地拒绝执行
+git -C "$UPR" add -A >/dev/null 2>&1
+git -C "$UPR" -c user.email=t@example.com -c user.name=t commit -qm snapshot >/dev/null 2>&1
+T "升级预览成功" "$UPR/scripts/upgrade_skill.sh" seo --source "$FAKE"
+T "预览不改动本地文件" cmp -s "$REPO/skills/seo/SKILL.md" "$UPR/skills/seo/SKILL.md"
+T "预览输出含 diff" bash -c "'$UPR/scripts/upgrade_skill.sh' seo --source '$FAKE' 2>&1 | grep -q '@@'"
+T "升级写入成功" "$UPR/scripts/upgrade_skill.sh" seo --source "$FAKE" --apply
+T "本地 skill 已替换" grep -q 'upstream version' "$UPR/skills/seo/SKILL.md"
+T "pin 已更新为上游 HEAD" grep -q "$(git -C "$FAKE" rev-parse --short HEAD)" "$UPR/skills/upstreams.json"
+printf 'dirty\n' >> "$UPR/README.md"
+T_fail "工作区脏时拒绝升级" "$UPR/scripts/upgrade_skill.sh" seo --source "$FAKE" --apply
+
 printf '\n%s结果%s  pass=%d  fail=%d\n' "$b" "$o" "$pass" "$fail"
 [ "$fail" -eq 0 ] || exit 1

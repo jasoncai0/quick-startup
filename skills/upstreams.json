@@ -8,11 +8,21 @@
       "license": "MIT",
       "license_snapshot": "obra-superpowers.txt",
       "skills": [
-        "brainstorming", "writing-plans", "executing-plans", "test-driven-development",
-        "systematic-debugging", "verification-before-completion", "requesting-code-review",
-        "receiving-code-review", "using-git-worktrees", "finishing-a-development-branch",
-        "subagent-driven-development", "dispatching-parallel-agents", "writing-skills"
-      ]
+        "brainstorming",
+        "writing-plans",
+        "executing-plans",
+        "test-driven-development",
+        "systematic-debugging",
+        "verification-before-completion",
+        "requesting-code-review",
+        "receiving-code-review",
+        "using-git-worktrees",
+        "finishing-a-development-branch",
+        "subagent-driven-development",
+        "dispatching-parallel-agents",
+        "writing-skills"
+      ],
+      "path_template": "skills/{skill}"
     },
     {
       "repo": "anthropics/skills",
@@ -20,8 +30,14 @@
       "license": "Apache-2.0",
       "license_snapshot": "anthropics-skills.Apache-2.0.txt",
       "skills": [
-        "frontend-design", "webapp-testing", "mcp-builder", "skill-creator", "claude-api", "doc-coauthoring"
-      ]
+        "frontend-design",
+        "webapp-testing",
+        "mcp-builder",
+        "skill-creator",
+        "claude-api",
+        "doc-coauthoring"
+      ],
+      "path_template": "skills/{skill}"
     },
     {
       "repo": "vercel-labs/agent-skills",
@@ -29,37 +45,63 @@
       "license": "MIT",
       "license_snapshot": "vercel-labs-agent-skills.NOTE.md",
       "skills": [
-        "vercel-react-best-practices", "vercel-composition-patterns",
-        "vercel-react-view-transitions", "web-design-guidelines"
-      ]
+        "vercel-react-best-practices",
+        "vercel-composition-patterns",
+        "vercel-react-view-transitions",
+        "web-design-guidelines"
+      ],
+      "path_template": "skills/{skill}",
+      "path_overrides": {
+        "vercel-react-best-practices": "skills/react-best-practices",
+        "vercel-composition-patterns": "skills/composition-patterns",
+        "vercel-react-view-transitions": "skills/react-view-transitions",
+        "web-design-guidelines": "skills/web-design-guidelines"
+      }
     },
     {
       "repo": "addyosmani/web-quality-skills",
       "commit": "afa8da9",
       "license": "MIT",
       "license_snapshot": "addyosmani-web-quality-skills.txt",
-      "skills": ["accessibility", "best-practices", "core-web-vitals", "performance", "seo", "web-quality-audit"]
+      "skills": [
+        "accessibility",
+        "best-practices",
+        "core-web-vitals",
+        "performance",
+        "seo",
+        "web-quality-audit"
+      ],
+      "path_template": "skills/{skill}"
     },
     {
       "repo": "OthmanAdi/planning-with-files",
       "commit": "2362ca3",
       "license": "MIT",
       "license_snapshot": "OthmanAdi-planning-with-files.txt",
-      "skills": ["planning-with-files"]
+      "skills": [
+        "planning-with-files"
+      ],
+      "path_template": "skills/{skill}"
     },
     {
       "repo": "ayghri/i-have-adhd",
       "commit": "1ecea19",
       "license": "MIT",
       "license_snapshot": "ayghri-i-have-adhd.txt",
-      "skills": ["i-have-adhd"]
+      "skills": [
+        "i-have-adhd"
+      ],
+      "path_template": "skills/{skill}"
     },
     {
       "repo": "multica-ai/andrej-karpathy-skills",
       "commit": "2c60614",
       "license": "MIT",
       "license_snapshot": "multica-ai-karpathy-skills.NOTE.md",
-      "skills": ["karpathy-guidelines"]
+      "skills": [
+        "karpathy-guidelines"
+      ],
+      "path_template": "skills/{skill}"
     },
     {
       "repo": "Egonex-AI/Understand-Anything",
@@ -67,17 +109,27 @@
       "license": "MIT",
       "license_snapshot": "Egonex-AI-Understand-Anything.txt",
       "skills": [
-        "understand", "understand-chat", "understand-dashboard", "understand-diff",
-        "understand-domain", "understand-explain", "understand-figma",
-        "understand-knowledge", "understand-onboard"
-      ]
+        "understand",
+        "understand-chat",
+        "understand-dashboard",
+        "understand-diff",
+        "understand-domain",
+        "understand-explain",
+        "understand-figma",
+        "understand-knowledge",
+        "understand-onboard"
+      ],
+      "path_template": "understand-anything-plugin/skills/{skill}"
     },
     {
       "repo": "cathrynlavery/diagram-design",
       "commit": "e57eda6",
       "license": "MIT",
       "license_snapshot": "cathrynlavery-diagram-design.txt",
-      "skills": ["diagram-design"]
+      "skills": [
+        "diagram-design"
+      ],
+      "path_template": "skills/diagram-design"
     }
   ]
 }
